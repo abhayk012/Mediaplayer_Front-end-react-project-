@@ -1,0 +1,1 @@
+export const serverurl='https://dummy-myjson-server-for-media-player.onrender.com'
