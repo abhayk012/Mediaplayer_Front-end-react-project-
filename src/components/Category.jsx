@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { addcategory, deletecategory, getAllCategory } from '../services/allapi';
+import { addcategory, deletecategory, getAllCategory, getVideoDetailsByID, updateCategory } from '../services/allapi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,6 +25,7 @@ const[allcategory,setallcategory]=useState([])
       if (response.status == 201) {
         toast.success(`successfully inserted ${ categoryName }`);
         handleClose();
+        getAllCat();
       }
       else {
         toast.danger("something went wrong")
@@ -38,7 +39,6 @@ const[allcategory,setallcategory]=useState([])
     const response = await getAllCategory();
     const {data}=response;
     setallcategory(data);
-    console.log(data);
   }
   const Deletecategory = async (id) => {
     await deletecategory(id);
@@ -48,6 +48,20 @@ const[allcategory,setallcategory]=useState([])
   useEffect(()=>{
     getAllCat();
   },[])
+
+  const dragOver=(e)=>{
+    e.preventDefault()
+  }
+
+  const drop=async(e,categoryID)=>{
+        const videoid=e.dataTransfer.getData("videoID")
+        const res=await getVideoDetailsByID(videoid)
+        const {data}=res;
+        let selectedcategory=allcategory?.find((item)=>item.id==categoryID)
+        selectedcategory.allVideos.push(data);
+        console.log(selectedcategory);
+        const result=await updateCategory(categoryID,selectedcategory);
+  }
   
   return (
     <>
@@ -61,7 +75,7 @@ const[allcategory,setallcategory]=useState([])
         {
         allcategory.length>0?
         allcategory.map((item)=>(
-        <div className='ms-2 mt-2 border border-secondary rounded p-3'>
+        <div className='ms-2 mt-2 border border-secondary rounded p-3' droppable onDragOver={(e)=>dragOver(e)} onDrop={(e)=>drop(e,item.id)}>
           <div className='d-flex justify-content-between align-items-center'>
             <h6>{item.categoryName}</h6>
             <button className='btn btn-danger ms-2' onClick={() => Deletecategory(item.id)}>
@@ -99,7 +113,7 @@ const[allcategory,setallcategory]=useState([])
           <Button variant="warning" onClick={handleAddCategory}>Add Category</Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer position="top-center" autoClose={5000} theme="colored"/>
+      <ToastContainer position="top-center" autoClose={1500} theme="colored"/>
     </>
   )
 }

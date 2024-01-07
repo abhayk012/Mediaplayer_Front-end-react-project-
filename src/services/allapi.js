@@ -47,3 +47,11 @@ export const getAllCategory = async()=>{
  export const deletecategory=async(id)=>{
    return await commonapi('DELETE',`${serverurl}/category/${id}`,{})
 }
+
+export const getVideoDetailsByID=async(id)=>{
+   return await commonapi('GET',`${serverurl}/video/${id}`,"")
+ }
+
+ export const updateCategory=async(id,body)=>{
+   return await commonapi('PUT',`${serverurl}/category/${id}`,body)
+ }

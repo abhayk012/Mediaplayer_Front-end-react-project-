@@ -10,6 +10,9 @@ function Videocard({displayvideo,setdeletevideostatus}) {
     const response = await deleteVideo(id)
     setdeletevideostatus(true)
   }
+  const dragStarted=(e,id)=>{
+    e.dataTransfer.setData("videoID",id);
+  }
   
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -35,8 +38,8 @@ function Videocard({displayvideo,setdeletevideostatus}) {
 
   return (
     <>
-    <Card style={{ width: '14rem' }}  >
-      <Card.Img className='poster' variant="top" height="250px" width="100%" style={{objectFit:"cover",cursor:"pointer"}} src={displayvideo.url} onClick={handleShow} />
+    <Card style={{ width: '14rem' }}  draggable onDragStart={(e)=>dragStarted(e,displayvideo?.id)}>
+      <Card.Img className='poster' variant="top" height="250px" width="100%" style={{objectFit:"cover",cursor:"pointer"}} src={displayvideo.url} onClick={handleShow} alt='No Image is Available'/>
       <Card.Body>
         <h6>{displayvideo.caption}</h6>
         <Button variant="danger" onClick={()=>removeVideo(displayvideo.id)}><i class="fa-solid fa-trash"></i> </Button>

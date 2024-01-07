@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function Add() {
+function Add({setuploadvdostatus}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -34,10 +34,11 @@ function Add() {
       const response = await uploadVideo(video)
       if (response.status === 201) {
         toast.success(`Successfully inserted the video ${response.data.caption}`)
+        setuploadvdostatus(response.data)
         handleClose();
       }
       else {
-        alert("something went wrong")
+        toast.error("Something Went Wrong")
       }
     }
   }
@@ -83,7 +84,7 @@ function Add() {
           <Button variant="warning" onClick={handleUpload}>Upload</Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer position="top-center" autoClose={2000} theme="colored"/>
+      <ToastContainer position="top-center" autoClose={1500} theme="colored"/>
     </>
   )
 }

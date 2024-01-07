@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { getAllVideos } from '../services/allapi';
 
-function View() {
+function View({uploadvdostatus}) {
   const [allVideo, setAllVideo] = useState([])
   const getAllUploadedVideos = async () => {
     const response = await getAllVideos();
@@ -14,7 +14,7 @@ function View() {
   const [deletevideostatus,setdeletevideostatus]=useState(false)
   useEffect(() => {
     getAllUploadedVideos();
-  }, [])
+  }, [deletevideostatus,uploadvdostatus])
   return (
     <>
       <Row>
